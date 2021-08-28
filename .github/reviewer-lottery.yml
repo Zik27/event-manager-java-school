@@ -1,0 +1,8 @@
+groups:
+  - name: devs
+    reviewers: 1
+    internal_reviewers: 1
+    usernames:
+      - Rusakimova
+      - Kexon5
+      - Zik27
