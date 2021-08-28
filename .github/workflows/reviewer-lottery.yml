@@ -11,11 +11,3 @@ jobs:
       - uses: uesteibar/reviewer-lottery@v1.1.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-groups:
-  - name: devs # name of the group
-    reviewers: 2 # how many reviewers do you want to assign?
-    internal_reviewers: 1 # how many reviewers do you want to assign when the PR author belongs to this group?
-    usernames: # github usernames of the reviewers
-      - Rusakimova
-      - Kexon5
