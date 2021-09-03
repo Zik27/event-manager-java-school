@@ -6,8 +6,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class Bot extends TelegramLongPollingBot {
-    public static final String TOKEN = "1829653509:AAEq72l8Ce1Wm9C_8L61Yj1A4y1eFqNmIhs";
-    public static final String USERNAME = "JavaSchoolEventManagerBot";
+    public static final String TOKEN = "1809944157:AAEN5NXfJ5UanwZtwYqUNqXFOFKImkUWolE";
+    public static final String USERNAME = "JavaEventManagerBot";
 
     @Override
     public String getBotUsername() {
