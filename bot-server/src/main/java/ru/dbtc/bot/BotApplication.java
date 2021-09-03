@@ -3,10 +3,12 @@ package ru.dbtc.bot;
 import lombok.SneakyThrows;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @SpringBootApplication
+@EnableEurekaClient
 public class BotApplication {
 
 	@SneakyThrows
