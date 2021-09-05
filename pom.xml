@@ -27,9 +27,15 @@
         <module>bot-server</module>
         <module>event-downloader-service</module>
         <module>eureka-service</module>
+        <module>config</module>
     </modules>
 
     <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>29.0-jre</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
