@@ -1,56 +1,57 @@
 package ru.dbtc.event_downloader_service.models;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
-/*"id": 1752676,
-        "starts_at": "2021-09-01T10:15:00+0300",
-        "name": "Лекция В.О. Никишиной (офлайн)",
-        "url": "https://fakultet-mirovoy-ek-event.timepad.ru/event/1752676/",
-        "poster_image": {
-        "default_url": "https://ucare.timepad.ru/e8e95ba1-3213-4ba4-8c21-d85ea2da3c22/-/preview/308x600/-/format/jpeg/poster_event_1752676.jpg",
-        "uploadcare_url": "//ucare.timepad.ru/e8e95ba1-3213-4ba4-8c21-d85ea2da3c22/"
-        },
-        "location": {
-        "country": "Россия",
-        "city": "Москва",
-        "address": "Малая Ордынка 29, актовый зал (ауд. 306)"
-        },
-        "categories": [
-        {
-        "id": 2465,
-        "name": "Наука"
-        }
-        ],
-        "tickets_limit": 55,
-        "ticket_types": [
-        {
-        "id": 4209171,
-        "name": "Входной билет",
-        "description": "",
-        "buy_amount_min": 1,
-        "buy_amount_max": 30,
-        "price": 0,
-        "is_promocode_locked": false,
-        "sale_ends_at": "2021-09-01T12:00:00+0300",
-        "is_active": true,
-        "ad_partner_profit": 0,
-        "send_personal_links": false,
-        "status": "ok"
-        }
-        ],
-        "age_limit": 12,
-        "moderation_status": "featured"
-        }*/
+import java.util.Date;
+import java.util.List;
 
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Document(indexName = "events")
 public class Event {
-    private String title;
-    private String category;
-    private int ageLimit;
-    private boolean isFree;
-    private String description;
-    private LocalDateTime startEvent;
-    private String country; //todo Check if there are events in other countries
-    private String city;
-    private String address;
+    @Id
+    private Integer id;
 
+    @Field(type = FieldType.Text)
+    private String title;
+
+    @Field(type = FieldType.Keyword)
+    private List<String> categories;
+
+    @Field(type = FieldType.Short)
+    private int ageLimit;
+
+    @Field(type = FieldType.Text)
+    private String url;
+
+//    @Field(type = FieldType.Boolean)
+//    private boolean isFree;
+
+    @Field(type = FieldType.Text)
+    private String description;
+
+    @Field(type = FieldType.Date)
+    private Date startEvent;
+
+    @Field(type = FieldType.Date)
+    private Date endEvent;
+
+    @Field(type = FieldType.Keyword)
+    private String country;
+
+    @Field(type = FieldType.Keyword)
+    private String city;
+
+    @Field(type = FieldType.Text)
+    private String address;
 }
