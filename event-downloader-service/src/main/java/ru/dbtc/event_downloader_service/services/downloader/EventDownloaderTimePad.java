@@ -45,7 +45,7 @@ public class EventDownloaderTimePad implements EventDownloader {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam("limit", 1)
                 .queryParam("moderation_statuses", "featured,shown");
-        ;
+
         return objectMapper.readValue(restTemplate.getForObject(builder.toUriString(), String.class), EventResponseDto.class)
                 .getTotal();
     }

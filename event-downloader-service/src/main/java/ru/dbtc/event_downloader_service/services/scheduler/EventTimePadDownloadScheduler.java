@@ -9,6 +9,7 @@ import ru.dbtc.event_downloader_service.dto.EventDto;
 import ru.dbtc.event_downloader_service.models.Event;
 import ru.dbtc.event_downloader_service.repository.EventRepository;
 import ru.dbtc.event_downloader_service.services.downloader.EventDownloader;
+import ru.dbtc.event_downloader_service.utils.convertors.CategoriesListConvertor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,12 @@ public class EventTimePadDownloadScheduler implements EventDownloadScheduler {
             List<EventDto> events = eventDownloader.getEvents(processedEvents, MAX_COUNT_EVENTS_IN_REQUEST);
             allEventsDto.addAll(events);
         }
+
+        modelMapper.createTypeMap(EventDto.class, Event.class)
+                .addMapping(eventDto -> eventDto.getLocation().getAddress(), Event::setAddress)
+                .addMapping(eventDto -> eventDto.getLocation().getCity(), Event::setCity)
+                .addMapping(eventDto -> eventDto.getLocation().getCountry(), Event::setCountry)
+                .addMappings(mapper -> mapper.using(new CategoriesListConvertor()).map(EventDto::getCategories, Event::setCategories));
 
         List<Event> allEvents = allEventsDto.stream()
                 .map(eventDto -> modelMapper.map(eventDto, Event.class))

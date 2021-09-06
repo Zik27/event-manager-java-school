@@ -16,7 +16,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Document(indexName = "events")
 public class Event {
     @Id
