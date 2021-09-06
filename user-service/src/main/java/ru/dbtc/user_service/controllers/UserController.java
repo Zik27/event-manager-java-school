@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDto addUser(@PathVariable int telegramId, @PathVariable String name) {
+    public UserDto addUser(@RequestParam int telegramId, @RequestParam String name) {
         return userService.addUser(telegramId,name);
     }
 
