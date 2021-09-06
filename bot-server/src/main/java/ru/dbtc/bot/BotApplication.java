@@ -21,12 +21,6 @@ public class BotApplication {
 		return restTemplateBuilder.build();
 	}
 
-	@Bean
-	@LoadBalanced
-	public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
-		return restTemplateBuilder.build();
-	}
-
     @SneakyThrows
 	public static void main(String[] args) {
 		SpringApplication.run(BotApplication.class, args);

@@ -1,7 +1,6 @@
 package ru.dbtc.bot;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -20,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-@Slf4j
 @AllArgsConstructor
 public class TelegramFacade {
     private BotStateContext botStateContext;
@@ -34,16 +32,11 @@ public class TelegramFacade {
         SendMessage replyMessage = null;
         if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
-            log.info("New callbackQuery from User: {}, userId: {}, with data: {}", update.getCallbackQuery().getFrom().getUserName(),
-                    callbackQuery.getFrom().getId(), update.getCallbackQuery().getData());
             return processCallbackQuery(callbackQuery);
         }
 
-
         Message message = update.getMessage();
         if (message != null && message.hasText()) {
-            log.info("New message from User:{}, userId: {}, chatId: {},  with text: {}",
-                    message.getFrom().getUserName(), message.getFrom().getId(), message.getChatId(), message.getText());
             replyMessage = handleInputMessage(message);
         }
         return replyMessage;
