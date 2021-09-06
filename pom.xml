@@ -27,6 +27,7 @@
         <module>bot-server</module>
         <module>event-downloader-service</module>
         <module>eureka-service</module>
+        <module>event-history</module>
     </modules>
 
     <dependencies>
