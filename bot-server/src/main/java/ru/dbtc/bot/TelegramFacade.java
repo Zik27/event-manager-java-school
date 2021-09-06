@@ -2,13 +2,22 @@ package ru.dbtc.bot;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.dbtc.bot.cache.UserDataCache;
+import ru.dbtc.bot.cache.UserProfileData;
 import ru.dbtc.bot.constants.BotState;
+import ru.dbtc.bot.services.KeyboardMarkUpServices;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -18,17 +27,25 @@ public class TelegramFacade {
     private UserDataCache userDataCache;
     private MainMenu mainMenu;
 
-    public SendMessage handleUpdate(Update update) {
-        SendMessage replyMessage = null;
+    @Autowired
+    private final RestTemplate restTemplate;
 
-        Message message = update.getMessage();
-        log.info("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-        if (message != null && message.hasText()) {
-            log.info("New message from User:{}, chatId: {},  with text: {}",
-                    message.getFrom().getUserName(), message.getChatId(), message.getText());
-            replyMessage = handleInputMessage(message);
+    public BotApiMethod<?> handleUpdate(Update update) {
+        SendMessage replyMessage = null;
+        if (update.hasCallbackQuery()) {
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+            log.info("New callbackQuery from User: {}, userId: {}, with data: {}", update.getCallbackQuery().getFrom().getUserName(),
+                    callbackQuery.getFrom().getId(), update.getCallbackQuery().getData());
+            return processCallbackQuery(callbackQuery);
         }
 
+
+        Message message = update.getMessage();
+        if (message != null && message.hasText()) {
+            log.info("New message from User:{}, userId: {}, chatId: {},  with text: {}",
+                    message.getFrom().getUserName(), message.getFrom().getId(), message.getChatId(), message.getText());
+            replyMessage = handleInputMessage(message);
+        }
         return replyMessage;
     }
 
@@ -36,13 +53,43 @@ public class TelegramFacade {
         BotState botState;
         String answer = message.getText();
         int userId = message.getFrom().getId();
-        log.info("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         if (answer.equals("/start")) {
+            String forObject = restTemplate.getForObject("http://USERS/users/" + userId, String.class);
+            System.out.println(forObject);
+            //todo посмотреть в user service есть ли такой юзер
+            //if (user isn't there'){
             botState = BotState.ASK_NAME;
+            //else botState = BotState.CHOOSE_EVENT;
         } else {
             botState = userDataCache.getUserBotState(userId);
         }
         userDataCache.setUserBotState(userId, botState);
         return botStateContext.processInputMessage(botState, message);
+    }
+    private BotApiMethod<?> processCallbackQuery(CallbackQuery buttonQuery) {
+        final long chatId = buttonQuery.getMessage().getChatId();
+        final int userId = buttonQuery.getFrom().getId();
+        KeyboardMarkUpServices keyboardMarkUpServices = new KeyboardMarkUpServices();
+        Message message = buttonQuery.getMessage();
+        BotState botState;
+        BotApiMethod<?> callBackAnswer = mainMenu.getMainMenuMessage(chatId, "Воспользуйтесь главным меню");
+
+        if (buttonQuery.getData().equals("buttonYes18")) {
+            callBackAnswer = new SendMessage(chatId, "Какой город тебя интересует?");
+            userDataCache.setUserBotState(userId, BotState.ASK_CONFIRMATION);
+        } else if (buttonQuery.getData().equals("buttonNo18")){
+            //todo фильтрация для детей
+            callBackAnswer = new SendMessage(chatId, "Какой город тебя интересует?");
+            userDataCache.setUserBotState(userId, BotState.ASK_CONFIRMATION);
+        } else if (buttonQuery.getData().equals("buttonChangeInfo")) {
+            callBackAnswer = new SendMessage(chatId, "Как тебя зовут?");
+            userDataCache.setUserBotState(userId, BotState.ASK_AGE);
+        } else if(buttonQuery.getData().equals("buttonGoToEvent")) {
+            userDataCache.setUserBotState(userId, BotState.CHOOSE_EVENT);
+            callBackAnswer = mainMenu.getMainMenuMessage(chatId, "Для выбора мероприятия воспользуйтесь главным меню");
+        }
+        return callBackAnswer;
+
+
     }
 }
