@@ -3,10 +3,14 @@ package ru.dbtc.event_history.service;
 
 import ru.dbtc.event_history.dto.UserEventHistoryDto;
 
-public interface EventService {
-    UserEventHistoryDto createEvent(String userId, int eventId);
+import java.util.List;
 
-    UserEventHistoryDto deleteEvent(String userId, int eventId);
+public interface EventService {
+    UserEventHistoryDto createEvent(UserEventHistoryDto userEventHistoryDto);
+
+    UserEventHistoryDto deleteEvent(int userId, int eventId);
 
     UserEventHistoryDto updateScore(UserEventHistoryDto userEventHistoryDto);
+
+    List<UserEventHistoryDto> getAllEvents(int userId);
 }

@@ -8,24 +8,31 @@ import ru.dbtc.event_history.dto.UserEventHistoryDto;
 import ru.dbtc.event_history.model.UserEventHistory;
 import ru.dbtc.event_history.repository.UserEventHistoryRepo;
 
-import java.util.Optional;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class EventServiceImpl implements EventService{
     @Autowired
     private UserEventHistoryRepo repo;
 
-    private UserEventHistoryDto toUserEventHistoryDto(UserEventHistory user){return new UserEventHistoryDto(user.getId(), user.getUserId(), user.getEventId());}
+    private UserEventHistoryDto toUserEventHistoryDto(UserEventHistory user){
+        return new UserEventHistoryDto(user.getId(), user.getUserId(), user.getEventId());
+    }
 
     @Override
-    public UserEventHistoryDto createEvent(String userId, int eventId) {
-        UserEventHistory user = new UserEventHistory(userId, eventId);
+    public UserEventHistoryDto createEvent(UserEventHistoryDto userEventHistoryDto) {
+        UserEventHistory user = UserEventHistory.builder()
+                        .userId(userEventHistoryDto.getUserId())
+                        .eventId(userEventHistoryDto.getEventId())
+                        .build();
         repo.save(user);
         return toUserEventHistoryDto(user);
     }
 
     @Override
-    public UserEventHistoryDto deleteEvent(String userId, int eventId) {
+    public UserEventHistoryDto deleteEvent(int userId, int eventId) {
         UserEventHistory userEventHistory = repo.findByUserIdAndEventId(userId, eventId)
                 .orElseThrow(()->{throw new ResponseStatusException(HttpStatus.NOT_FOUND);
                 });
@@ -41,4 +48,14 @@ public class EventServiceImpl implements EventService{
         userEventHistory.setScore(userEventHistory.getScore());
         return toUserEventHistoryDto(userEventHistory);
     }
+
+    @Override
+    public List<UserEventHistoryDto> getAllEvents(int userId) {
+        List<UserEventHistory> allEvents = repo
+                .findByUserId(userId)
+                .orElseThrow(()->{throw new ResponseStatusException(HttpStatus.NOT_FOUND);});
+        return allEvents.stream().map(this::toUserEventHistoryDto).collect(toList());
+    }
+
+
 }
