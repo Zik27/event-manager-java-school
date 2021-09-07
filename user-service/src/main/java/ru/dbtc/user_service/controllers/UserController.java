@@ -21,8 +21,8 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDto addUser(@RequestParam int telegramId, @RequestParam String name) {
-        return userService.addUser(telegramId,name);
+    public UserDto addUser(@RequestBody UserDto userDto) {
+        return userService.addUser(userDto);
     }
 
     @DeleteMapping(value = "{id}")
