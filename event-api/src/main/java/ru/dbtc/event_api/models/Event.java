@@ -1,4 +1,4 @@
-package ru.dbtc.event_downloader_service.models;
+package ru.dbtc.event_api.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -53,3 +53,4 @@ public class Event {
     @Field(type = FieldType.Text)
     private String address;
 }
+

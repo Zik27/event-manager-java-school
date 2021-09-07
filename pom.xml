@@ -28,6 +28,8 @@
         <module>event-downloader-service</module>
         <module>eureka-service</module>
         <module>user-service</module>
+        <module>event-api</module>
+
     </modules>
 
     <dependencies>
