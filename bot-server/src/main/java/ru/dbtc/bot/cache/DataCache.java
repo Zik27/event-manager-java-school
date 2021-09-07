@@ -1,11 +1,13 @@
 package ru.dbtc.bot.cache;
 
 import ru.dbtc.bot.constants.BotState;
+import ru.dbtc.bot.constants.Buttons;
 
 public interface DataCache {
-    //todo разбить на несколько интерфейсов
-    void setUserBotState(int userId, BotState botState);
-    BotState getUserBotState(int userId);
-    UserProfileData getUserProfileData(int userId);
-    void saveUserProfileData(int userId, UserProfileData userProfileData);
+    void setUserBotState(Integer userId, BotState botState);
+    void setUserButtonState(Integer userId, Buttons button);
+    BotState getUserBotState(Integer userId);
+    Buttons getUserButtonState(Integer userId);
+    UserProfileData getUserProfileData(Integer userId);
+    void saveUserProfileData(Integer userId, UserProfileData userProfileData);
 }

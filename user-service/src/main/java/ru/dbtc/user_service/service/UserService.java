@@ -6,7 +6,7 @@ import ru.dbtc.user_service.model.UserEntity;
 public interface UserService {
     UserDto getUser(int id);
 
-    UserDto addUser(int telegramId, String name);
+    UserDto addUser(UserDto userDto);
 
     UserDto deleteUser(int id);
 

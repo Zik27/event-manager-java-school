@@ -1,19 +1,17 @@
-package ru.dbtc.user_service.dto;
+package ru.dbtc.bot.cache;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserDto {
     private int id;
     private String firstName;
     private String lastName;
     private String userName;
-    private int age;
-
+    private int birthYear;
+    private String city;
 }

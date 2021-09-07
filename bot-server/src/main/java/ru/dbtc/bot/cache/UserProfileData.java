@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Component
 public class UserProfileData {
-    String name;
-    int age;
+    private int age;
+    private String city;
 }
