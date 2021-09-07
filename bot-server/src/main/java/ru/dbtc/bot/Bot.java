@@ -1,36 +1,55 @@
 package ru.dbtc.bot;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.bots.TelegramWebhookBot;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class Bot extends TelegramLongPollingBot {
-    public static final String TOKEN = "1809944157:AAEN5NXfJ5UanwZtwYqUNqXFOFKImkUWolE";
-    public static final String USERNAME = "JavaEventManagerBot";
+@Setter
+@Slf4j
+public class Bot extends TelegramWebhookBot {
+    @Value("${bot.botToken}")
+    private String botToken;//= "1809944157:AAEN5NXfJ5UanwZtwYqUNqXFOFKImkUWolE";
+    @Value("${bot.userName}")
+    private String botUserName;// = "JavaEventManagerBot";
+    @Value("${bot.webHookPath}")
+    private String webHookPath;
+
+    private TelegramFacade telegramFacade;
+
+    public Bot(TelegramFacade telegramFacade) {
+        this.telegramFacade = telegramFacade;
+    }
+
+    @Override
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        BotApiMethod<?> replyToUser = telegramFacade.handleUpdate(update);
+        return replyToUser;
+    }
 
     @Override
     public String getBotUsername() {
-        return USERNAME;
+        return botUserName;
     }
 
     @Override
     public String getBotToken() {
-        return TOKEN;
+        return botToken;
     }
 
-    @SneakyThrows
     @Override
-    public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            SendMessage message = new SendMessage(); // Create a SendMessage object with mandatory fields
-            message.setChatId(update.getMessage().getChatId().toString());
-            message.setText(update.getMessage().getText());
-            execute(message);
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setText("KAK DELA?");
-            sendMessage.setChatId(update.getMessage().getChatId().toString());
-            execute(sendMessage); // Call method to send the message
-        }
+
+    public String getBotPath() {
+        return webHookPath;
     }
 }
