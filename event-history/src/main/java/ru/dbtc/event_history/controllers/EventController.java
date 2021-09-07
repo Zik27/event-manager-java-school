@@ -14,8 +14,8 @@ public class EventController {
     private EventService eventService;
 
     @PostMapping
-    public UserEventHistoryDto createEvent(@RequestBody UserEventHistoryDto userEventHistoryDto){
-        return eventService.createEvent(userEventHistoryDto);
+    public UserEventHistoryDto createEvent(@RequestParam int userId, @RequestParam int eventId){
+        return eventService.createEvent(userId, eventId);
     }
 
     @DeleteMapping
@@ -23,9 +23,9 @@ public class EventController {
         return eventService.deleteEvent(userId, eventId);
     }
 
-    @PatchMapping(value = "/{score}")
-    public UserEventHistoryDto updateScore(@RequestBody UserEventHistoryDto userEventHistoryDto){
-        return eventService.updateScore(userEventHistoryDto);
+    @PutMapping
+    public UserEventHistoryDto updateScore(@RequestParam int score, @RequestParam int userId, @RequestParam int eventId){
+        return eventService.updateScore(score, userId, eventId);
     }
 
     @GetMapping(value = "/{userId}")

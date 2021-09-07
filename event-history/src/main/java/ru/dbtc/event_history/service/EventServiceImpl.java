@@ -1,5 +1,6 @@
 package ru.dbtc.event_history.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,18 +18,21 @@ public class EventServiceImpl implements EventService{
     @Autowired
     private UserEventHistoryRepo repo;
 
-    private UserEventHistoryDto toUserEventHistoryDto(UserEventHistory user){
-        return new UserEventHistoryDto(user.getId(), user.getUserId(), user.getEventId());
-    }
+    @Autowired
+    private ModelMapper modelMapper;
+
+//    private UserEventHistoryDto toUserEventHistoryDto(UserEventHistory user){
+//        return new UserEventHistoryDto(user.getId(), user.getUserId(), user.getEventId());
+//    }
 
     @Override
-    public UserEventHistoryDto createEvent(UserEventHistoryDto userEventHistoryDto) {
+    public UserEventHistoryDto createEvent(int userId, int eventId) {
         UserEventHistory user = UserEventHistory.builder()
-                        .userId(userEventHistoryDto.getUserId())
-                        .eventId(userEventHistoryDto.getEventId())
+                        .userId(userId)
+                        .eventId(eventId)
                         .build();
         repo.save(user);
-        return toUserEventHistoryDto(user);
+        return modelMapper.map(user, UserEventHistoryDto.class);
     }
 
     @Override
@@ -37,16 +41,17 @@ public class EventServiceImpl implements EventService{
                 .orElseThrow(()->{throw new ResponseStatusException(HttpStatus.NOT_FOUND);
                 });
         repo.deleteByUserIdAndEventId(userId, eventId);
-        return toUserEventHistoryDto(userEventHistory);
+        return modelMapper.map(userEventHistory, UserEventHistoryDto.class);
     }
 
     @Override
-    public UserEventHistoryDto updateScore(UserEventHistoryDto userEventHistoryDto) {
-        UserEventHistory userEventHistory = repo.findByUserIdAndEventId(userEventHistoryDto.getUserId(),userEventHistoryDto.getEventId())
+    public UserEventHistoryDto updateScore(int score, int userId, int eventId) {
+        UserEventHistory userEventHistory = repo.findByUserIdAndEventId(userId, eventId)
                 .orElseThrow(()->{throw new ResponseStatusException(HttpStatus.NOT_FOUND);
                 });
-        userEventHistory.setScore(userEventHistory.getScore());
-        return toUserEventHistoryDto(userEventHistory);
+        userEventHistory.setScore(score);
+        repo.save(userEventHistory);
+        return modelMapper.map(userEventHistory, UserEventHistoryDto.class);
     }
 
     @Override
@@ -54,7 +59,9 @@ public class EventServiceImpl implements EventService{
         List<UserEventHistory> allEvents = repo
                 .findByUserId(userId)
                 .orElseThrow(()->{throw new ResponseStatusException(HttpStatus.NOT_FOUND);});
-        return allEvents.stream().map(this::toUserEventHistoryDto).collect(toList());
+        return allEvents.stream()
+                .map(userEventHistory-> modelMapper.map(userEventHistory, UserEventHistoryDto.class))
+                .collect(toList());
     }
 
 
