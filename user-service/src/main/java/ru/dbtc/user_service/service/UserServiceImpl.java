@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUser(int id) {
         return toUserDto(repo
                 .findById(id)
-                .orElseThrow(NotFoundException::new));
+                .orElseThrow(()->{throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User with id:"+id+" not found");}));
     }
 
     @Override
