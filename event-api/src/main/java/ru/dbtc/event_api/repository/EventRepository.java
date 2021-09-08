@@ -16,6 +16,9 @@ public interface EventRepository extends ElasticsearchRepository<Event, Integer>
 
     Optional<List<Event>> findTop10EventsByDescription(String description);
 
+    @Query("{\"bool\": {\"must\": [ {\"match\": {\"description\": \"?0\"} }, {\"match\": {\"city\": \"?1\"} }, {\"match\": {\"startEvent\": \"?2\"} } ] } }")
+    Event findTop1ByDescriptionAndCityAndStartEvent(String description, String city, String startEvent);
+
     Optional<List<Event>> findTop10EventsByTitle(String title);
 
     @Query("{\"match\": {\"categories\" : \"?0\"} } }")

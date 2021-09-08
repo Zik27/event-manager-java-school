@@ -1,12 +1,18 @@
 package ru.dbtc.event_api.controllers;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.*;
 import ru.dbtc.event_api.models.Event;
 import ru.dbtc.event_api.services.EventService;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+@Api(tags="Event-API")
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
@@ -39,9 +45,14 @@ public class EventController {
         return eventService.getRandEventByCity(city);
     }
 
-    @GetMapping("/keywords")
+    @GetMapping("/keywords/description")
     public List<Event> getTop10EventsByDescription(@RequestParam String description) {
         return eventService.getTop10EventsByDescription(description);
+    }
+
+    @GetMapping("/keywords")
+    public Event getEventByDescriptionAndCityAndStartEventAfter(@RequestParam String description, @RequestParam String city, @RequestParam String startEvent) {
+        return eventService.getEventByDescriptionAndCityAndStartEvent(description, city, startEvent);
     }
 
     @GetMapping("/categories/{category}")
@@ -54,7 +65,7 @@ public class EventController {
         return eventService.getTop10EventsByTitle(title);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteEventById(@PathVariable int id) {
         eventService.deleteEventById(id);
     }
@@ -64,10 +75,17 @@ public class EventController {
         eventService.createEventById(event);
     }
 
-    @PatchMapping("/update/location")
-    public void updateAddressOfEvent(@RequestBody Integer eventId, @RequestBody String newAddress) {
+    @PutMapping("/location/address")
+    public void updateAddressOfEvent(@RequestParam int eventId, @RequestParam String newAddress) {
         eventService.updateAddressOfEvent(eventId, newAddress);
     }
+
+//    @GetMapping("/selection")
+//    public Event selectEventByFilters(@RequestParam String userId, @RequestParam Date date, @RequestParam String[] filters) {
+//        System.out.println("userId = " + userId + ", filters = " + Arrays.deepToString(filters));
+//        return eventService.selectEventByFilters(userId, date, filters);
+////        return null;
+//    }
 
 //    @DeleteMapping("/deleteByDate")
 //    public String deleteEventsBeforeDate(@RequestParam Date date) {
