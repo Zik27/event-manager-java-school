@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto addUser(UserDto userDto) {
         UserEntity user = repo.findById(userDto.getId()).orElse(null);
+
         if (user!=null){
             throw new NotFoundException();
         }
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
         repo.save(user);
         return modelMapper.map(user, UserDto.class);
     }
-
+  
     @Override
     public UserDto deleteUser(int id) {
         UserEntity userEntity = repo.findById(id)

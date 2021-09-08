@@ -3,11 +3,9 @@ package ru.dbtc.bot;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.dbtc.bot.constants.BotState;
-import ru.dbtc.bot.handlers.InputMessageHandler;
+import ru.dbtc.bot.handlers.messageHandlers.InputMessageHandler;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

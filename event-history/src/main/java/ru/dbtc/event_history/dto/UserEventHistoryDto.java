@@ -11,13 +11,13 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserEventHistoryDto {
     private int id;
-    private String userId;
+    private int userId;
     private int eventId;
     private int score;
 
-    public UserEventHistoryDto(int id, String userId, int eventId){
-        this.id = id;
-        this.userId = userId;
-        this.eventId = eventId;
-    }
+//    public UserEventHistoryDto(int id, int userId, int eventId){
+//        this.id = id;
+//        this.userId = userId;
+//        this.eventId = eventId;
+//    }
 }

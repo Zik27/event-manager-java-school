@@ -12,6 +12,7 @@ import javax.persistence.Id;
 @Entity
 @Builder
 public class UserEntity {
+
     @Id
     private int id;
     private String firstName;
