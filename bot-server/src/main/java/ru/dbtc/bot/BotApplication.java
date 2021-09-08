@@ -15,12 +15,6 @@ import org.springframework.web.client.RestTemplate;
 @EnableEurekaClient
 
 public class BotApplication {
-	@Bean
-	@LoadBalanced
-	public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
-		return restTemplateBuilder.build();
-	}
-
     @SneakyThrows
 	public static void main(String[] args) {
 		SpringApplication.run(BotApplication.class, args);

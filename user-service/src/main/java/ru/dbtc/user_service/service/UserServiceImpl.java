@@ -16,26 +16,37 @@ public class UserServiceImpl implements UserService {
     private UserRepo repo;
 
     private UserDto toUserDto(UserEntity user) {
-        return new UserDto(user.getId(),user.getName());
+        return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getUserName(), user.getAge());
     }
+
 
     @Override
     public UserDto getUser(int id) {
         return toUserDto(repo
                 .findById(id)
-                .orElseThrow(()->{throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User with id:"+id+" not found");}));
+                .orElseThrow(() -> {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id:" + id + " not found");
+                }));
     }
 
     @Override
-    public UserDto addUser(int telegramId, String name) {
-        UserEntity user = repo.findById(telegramId).orElse(null);
-        if (user!=null){
+    public UserDto addUser(UserDto userDto) {
+        UserEntity user = repo.findById(userDto.getId()).orElse(null);
+        if (user != null) {
             throw new NotFoundException();
         }
-        user=new UserEntity(telegramId,name);
+
+        user = UserEntity.builder()
+                .userName(user.getUserName())
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .age(user.getAge())
+                .id(userDto.getId())
+                .build();
         repo.save(user);
         return toUserDto(user);
     }
+
 
     @Override
     public UserDto deleteUser(int id) {
@@ -49,8 +60,12 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto userDto) {
         UserEntity userEntity = repo.findById(userDto.getId())
                 .orElseThrow(NotFoundException::new);
-        userEntity.setName(userDto.getName());
+        userEntity.setFirstName(userDto.getFirstName());
+        userEntity.setLastName(userDto.getLastName());
+        userEntity.setUserName(userDto.getUserName());
+        userEntity.setAge(userDto.getAge());
         repo.save(userEntity);
         return toUserDto(userEntity);
     }
+
 }

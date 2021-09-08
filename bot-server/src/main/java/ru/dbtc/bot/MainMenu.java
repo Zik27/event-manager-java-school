@@ -13,14 +13,14 @@ import java.util.List;
 @Component
 public class MainMenu {
 
-    public BotApiMethod<?> getMainMenuMessage(final long chatId, final String textMessage) {
+    public SendMessage getMainMenuMessage(final long chatId, final String textMessage) {
         final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard();
         final SendMessage mainMenuMessage =
                 createMessageWithKeyboard(chatId, textMessage, replyKeyboardMarkup);
         return mainMenuMessage;
     }
 
-    private ReplyKeyboardMarkup getMainMenuKeyboard() {
+    public ReplyKeyboardMarkup getMainMenuKeyboard() {
 
         final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
@@ -32,12 +32,15 @@ public class MainMenu {
         KeyboardRow row1 = new KeyboardRow();
         KeyboardRow row2 = new KeyboardRow();
         KeyboardRow row3 = new KeyboardRow();
+        KeyboardRow row4 = new KeyboardRow();
         row1.add(new KeyboardButton("Найти новое мероприятие"));
         row2.add(new KeyboardButton("Мои мероприятия"));
-        row3.add(new KeyboardButton("Помощь"));
+        row3.add(new KeyboardButton("Изменить информацию о себе"));
+        row4.add(new KeyboardButton("Помощь"));
         keyboard.add(row1);
         keyboard.add(row2);
         keyboard.add(row3);
+        keyboard.add(row4);
         replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;
     }

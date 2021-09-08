@@ -29,6 +29,12 @@ public class BotConfig {
     private String webHookPath;
 
     @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+        return restTemplateBuilder.build();
+    }
+
+    @Bean
     public Bot bot (TelegramFacade telegramFacade) {
         Bot bot = new Bot(telegramFacade);
         bot.setBotToken(botToken);

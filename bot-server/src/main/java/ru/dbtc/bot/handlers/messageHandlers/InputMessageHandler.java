@@ -1,4 +1,4 @@
-package ru.dbtc.bot.handlers;
+package ru.dbtc.bot.handlers.messageHandlers;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
