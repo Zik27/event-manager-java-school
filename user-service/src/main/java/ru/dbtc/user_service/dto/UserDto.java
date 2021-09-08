@@ -14,6 +14,6 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String userName;
-    private int age;
-
+    private int birthYear;
+    private String city;
 }

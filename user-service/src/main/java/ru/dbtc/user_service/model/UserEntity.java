@@ -2,14 +2,15 @@ package ru.dbtc.user_service.model;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Builder
-
 public class UserEntity {
 
     @Id
@@ -17,6 +18,6 @@ public class UserEntity {
     private String firstName;
     private String lastName;
     private String userName;
-    private int age;
-
+    private int birthYear;
+    private String city;
 }
