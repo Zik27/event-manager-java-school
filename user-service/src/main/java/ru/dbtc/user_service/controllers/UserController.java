@@ -3,7 +3,6 @@ package ru.dbtc.user_service.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.dbtc.user_service.dto.UserDto;
-import ru.dbtc.user_service.model.UserEntity;
 import ru.dbtc.user_service.service.UserService;
 
 import static ru.dbtc.user_service.api.ApiConstants.USERS;
@@ -21,8 +20,8 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDto addUser(@RequestParam int telegramId, @RequestParam String name) {
-        return userService.addUser(telegramId,name);
+    public UserDto addUser(@RequestBody UserDto userDto) {
+        return userService.addUser(userDto);
     }
 
     @DeleteMapping(value = "{id}")
@@ -30,7 +29,7 @@ public class UserController {
         return userService.deleteUser(id);
     }
 
-    @PatchMapping
+    @PutMapping
     public UserDto updateUser(@RequestBody UserDto userDto) {
         return userService.updateUser(userDto);
     }
